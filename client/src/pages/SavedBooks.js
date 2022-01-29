@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
 import { useQuery, useMutation } from "@apollo/client";
@@ -6,27 +6,28 @@ import { QUERY_ME } from "../utils/queries";
 import { REMOVE_BOOK } from "../utils/mutations";
 import { removeBookId } from '../utils/localStorage';
 
-const SavedBooks = () => {
- 
-  const { loading, data } = useQuery(QUERY_ME, {
-    refetchOnMount: "always",
-    force: true,
-  });
-  const userData = data?.me || [];
-  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
-
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
-  const handleDeleteBook = async (bookId) => {
-
-    try {
-      const { data } = await removeBook({
-        variables: { bookId: bookId },
-      });
-      removeBookId(bookId);
-    } catch (error) {
-      console.log(error);
+  const SavedBooks = () => {
+    const [refetchData, setRefetchData] = useState(true);
+    const [removeBook] = useMutation(REMOVE_BOOK);
+    const { loading, data, refetch } = useQuery(QUERY_ME);
+    const userData = data?.me || [];
+  
+    // refetch the data if required (first render and after delete)
+    if (refetchData) {
+      setRefetchData(!refetchData);
+      refetch();
     }
-  };
+  
+    // create function that accepts the book's mongo _id value as param and deletes the book from the database
+    const handleDeleteBook = async (bookId) => {
+      try {
+        const { data } = await removeBook({ variables: { bookId: bookId } });
+        removeBookId(bookId);
+      } catch (error) {
+        console.log(error);
+      }
+      setRefetchData(true);
+    };
 
   // if data isn't here yet, say so
   if (loading) {

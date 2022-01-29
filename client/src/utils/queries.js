@@ -9,6 +9,7 @@ export const QUERY_ME = gql`
           authors
           description
           bookId
+          title
           link
           image
       }
