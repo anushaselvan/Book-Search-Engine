@@ -3,7 +3,7 @@
 
 ## Description
   A simple book search engine created using the MERN stack. The application allows the user to signup/login, search and save books. It is build with Apollo Server using GraphQl API. Uses the MERN stack, with a React front end, MongoDB database, and Node.js/Express.js server and Google Books API.<br>
-  View the deployed application **[here](https://intense-waters-37877.herokuapp.com/)**
+  View the application here deployed in ***[Heroku](https://intense-waters-37877.herokuapp.com/)***
 
 ## Table of Contents
   - [Installation](#Installation)
